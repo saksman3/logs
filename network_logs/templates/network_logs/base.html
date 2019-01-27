@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+   {% load widget_tweaks %}
+<style media="screen">
+.navbar-brand{
+  position: relative;
+    background: url('http://www.sars.gov.za/SiteCollectionImages/SARS-LOGO.png');
+    width: 200px;
+    left: 15px;
+    margin-right: 15px;
+    background-size: auto;
+
+}
+.navbar{
+  margin-top: 5px;
+}
+body{
+
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'network_logs/css/font-awesome.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'network_logs/css/style.css' %}" />
+</head>
+<body>
+
+  <nav class="navbar navbar-light" >
+      <div class="container-fluid">
+           <div class="navbar-header" >
+                 <button type="button" class="navbar-toggle"name="button" data-toggle="collapse" data-target="#topNavBar" >
+
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                 </button>
+                 <a class="navbar-brand" href="{% url 'network_logs:index' %}">
+
+                 </a>
+
+           </div>
+                 <div class="collapse navbar-collapse" id="topNavBar">
+                    <ul class="nav navbar-nav">
+                         <li class="active">
+                             <a href="#">
+                               <span class="glyphicon glyphicon-dashboard " aria-hidden="true">Servers</span>
+                             </a>
+                         </li>
+                         <li><a href="{% url 'network_logs:filter'%}">Search</a></li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search"method="get" action="#">
+                        <div class="">
+                          {%block search %}
+                          {% endblock %}
+                        </div>
+
+                    </form>
+                    <div class="navbar-right pull-right">
+                      <a href="#">user</a>
+                    </div>
+                 </div>
+      </div>
+ </nav>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script src="{% static 'network_logs/js/jquery_ui.js' %}" ></script>
+
+{% block body %}
+{% endblock %}
+<!--My modal-->
+
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><p id="serv">ssjjsjjj</p></h4>
+
+      </div>
+      <div class="modal-body">
+      <p id="log"></p>
+      <div id="email-input" class="input-group">
+        <form method="post" action=".">
+          {% csrf_token %}
+        <input type="email" required style="border-radius:2px;width:200px;" placeholder="Enter Email"name="email" value="">
+        <input type="text" id="hid" name="logID" hidden="true">
+          <button type="submit" class="btn-xs btn-primary" name="button">Send</button>
+        </form>
+      </div>
+
+      </div>
+
+
+      <div class="modal-footer">
+        <a href="#" class="pull-left"><span class="fa fa-alarm-clock" id='send'>Send via Email</span></a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function() {
+  $("#search").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#tbl > tbody > tr").filter(function() {  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      console.log("xxxxx");
+    });
+  });
+});
+
+$(document).ready(function(){
+  $('#email-input').hide();
+
+  $('#send').click(function(){
+    if($('#email-input').is(':hidden'))
+    {
+      $('#email-input').show();
+    }
+    else
+    {
+      $('#email-input').hide();
+    }
+  });
+});
+myTab = document.getElementById('tbl');
+var rowClicked;
+
+$("#tbl tr").on("click",function(){
+   var x = this.rowIndex;
+   getData(x);
+});
+//function that recieves the clicked row index and populate the modal with data from the table
+function getData(x){
+  logP = document.getElementById('log');
+  head = document.getElementById('serv')
+  var obj = myTab.rows.item(x).cells;
+  logP.innerHTML = obj.item(3).innerHTML;
+  head.innerHTML = obj.item(1).innerHTML+'-'+obj.item(2).innerHTML;
+  $('#hid').val(obj.item(0).innerHTML);
+}
+//jquery function for removing classes accordingly
+$('#tbl tr p').click(function() {
+   $(this).removeClass('ellipse');
+   $(this).addClass('myclass');
+     rowClicked = this;
+});
+
+//jquery for handling the closing of the modal
+ $('#myModal').on('hidden.bs.modal', function () {
+   rowClicked.className='ellipse';
+   $('#email-input').hide();
+ });
+</script>
+
+</body>

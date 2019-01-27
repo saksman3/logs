@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <form method="get">
+       {{ filter.form.as_p }}
+  <button type="submit">Search</button>
+</form>
+<ul>
+{% for logs in filters.qs %}
+  <li>{{ logs.serverID_id }} - {{ logs.log_desc}}</li>
+{% endfor %}
+</ul>
+  </body>
+</html>

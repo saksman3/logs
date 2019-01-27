@@ -1,0 +1,41 @@
+{% if error_message %}
+  <p>{{ error_message }}</p>
+{% endif %}
+
+<div class="container">
+    {% load staticfiles %}
+    <h2>Actors list</h2>
+
+    <form class="form-inline" action="" method="GET">
+        {{ form }}
+        <button class="btn" type="submit">Search</button>
+        </fieldset>
+    </form>
+
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th>LogID</th>
+            <th>LogDate</th>
+            <th>LogTime</th>
+        </tr>
+        {% for object in object_list %}
+        <tr>
+            <td>{{object.logID}}</td>
+            <td>{{object.logDate}}</td>
+            <td>{{object.log_time}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if is_paginated %}
+
+    {% endif %}
+
+</div>
+
+
+<script>
+$( function() {
+$( "#id_search_logDate").datepicker({ dateFormat: 'yy-mm-dd' });
+} );
+</script>

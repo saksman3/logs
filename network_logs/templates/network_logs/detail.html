@@ -1,0 +1,84 @@
+{% extends 'network_logs/base.html' %}
+{%block search %}
+<input id="search" type="text" class="form-control" value="">
+{%endblock%}
+{% block body %}
+    {% if error_message %}
+    <p><Strong>{{error_message}}</strong></p>
+    {% endif %}
+    <style media="screen">
+      td{
+        max-width: 100px;
+           overflow: hidden;
+           text-overflow: ellipsis;
+           white-space: nowrap;
+
+      }
+    </style>
+    <div class="container-fluid">
+    <div class="">
+       <div class="col-md-3">
+
+         <div class="panel panel-primary">
+           <div class="panel-heading">
+             <h3 class="panel-title">Name : {{name}}</h3>
+           </div>
+           <div class="panel-body">
+               <h4>ID : {{id}}</h4>
+               <h5>Total Logs : {{logs_count}}</h5>
+           </div>
+           <div class="panel-footer">
+               <p>SARS Network_logs.</p>
+           </div>
+         </div>
+       </div>
+       <div class="col-md-8">
+         {% if server %}
+              <table id="tbl" class="table table-condensed">
+                  <thead>
+                    <th>logID</th>
+                    <th>logDate</th>
+                    <th>logTime</th>
+                    <th>log_desc</th>
+
+                  </thead>
+                  <tbody>
+                        {% for log in server %}
+                        <tr id="table-row" data-toggle="modal"  data-target="#myModal">
+                            <td>{{ log.logID}}</td>
+                            <td>{{ log.logDate }}</td>
+                            <td>{{ log.log_time }}</td>
+                            <td>
+                               <p id="para" class="ellipse">{{log.log_desc}}</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+              </table>
+              <div class="pagination">
+         <span class="step-links">
+             {% if server.has_previous %}
+                 <a href="?page=1">&laquo; first</a>
+                 <a href="?page={{ server.previous_page_number }}">previous</a>
+             {% endif %}
+
+             <span class="current">
+                 Page {{ server.number }} of {{ server.paginator.num_pages }}.
+             </span>
+
+             {% if server.has_next %}
+                 <a href="?page={{ server.next_page_number }}">next</a>
+                 <a href="?page={{ server.paginator.num_pages }}">last &raquo;</a>
+             {% endif %}
+         </span>
+     </div>
+
+              {% else %}
+                <h2>No logs.</h2>
+              {% endif %}
+     </div>
+
+
+   </div>
+
+{% endblock %}

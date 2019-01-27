@@ -1,0 +1,49 @@
+{% extends 'network_logs/base.html' %}
+{% block search %}
+<input id="search" type="text" class="form-control" placeholder="filter servers">
+{% endblock %}
+{% block body %}
+   {% if object_list %}
+       <div class="container">
+       <div class="">
+         <div class="col-md-10">
+         <table id="tbl"class="table">
+           <thead>
+             <th>ServerID</th>
+             <th>ServerName</th>
+             <th>View details</th>
+             </thead>
+           <tbody>
+             {% for server in object_list %}
+             <tr>
+               <td>{{ server.serverID }}</td>
+               <td>{{ server.server_name }}</td>
+               <td>
+                  <a href="{% url 'network_logs:detail' server.serverID %}" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-tasks"></span> </a>
+               </td>
+             </tr>
+              {% endfor %}
+           </tbody>
+         </table>
+         <div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ object_list.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+        {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}">next</a>
+            <a href="?page={{ object_list.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+       </div>
+     </div>
+     </div>
+     {% else %}
+      <h2> No Server installed </h2>
+     {% endif %}
+{% endblock %}
